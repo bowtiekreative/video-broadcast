@@ -10,6 +10,7 @@ class App extends React.Component {
     this.state = {
       background: 'yellow',
       callersList: [],
+      creator: false,
       callersCount: 0,
       calledIn: false,
       hasCalledIn: false,
@@ -32,6 +33,19 @@ class App extends React.Component {
   componentWillMount() {
     this.handleCallerChanges();
     this.handleEvents();
+    this.getInfo();
+  }
+
+  getInfo(){
+    const user_id = Bebo.User.getId();
+    Bebo.Server.get()
+    .then((data) => {
+      if(data.creator.user_id === user_id){
+        this.setState({creator: true});
+      } else {
+        this.setState({creator: false});
+      }
+    })
   }
 
   blurInput() {
@@ -80,7 +94,7 @@ class App extends React.Component {
   }
 
   callInHangUp() {
-    console.log('toad', this.state.calledIn);
+    if(!this.state.creator){ return }
     if(!this.state.calledIn){
       this.setState({calledIn: true, hasCalledIn: true});
       this.props.bebo.callin(true, true);
@@ -92,7 +106,6 @@ class App extends React.Component {
   }
 
   parentClick() {
-    console.log('click');
     this.setState({background:'blue'});
   }
 
@@ -118,13 +131,19 @@ class App extends React.Component {
         </div>);
   }
 
+  renderControls() {
+    if(this.state.creator){
+      return(<button id='camera' className='big-call-btn camera-btn' onClick={this.callInHangUp}></button>)
+    }
+  }
+
   renderEmpty() {
     if(this.state.callersCount !== 0){ return null }
     return <div id='empty-state' className='landing'>
       <div className="landing-text">
         <h1>video<strong>lounge</strong></h1>
         <p>8 way facetime</p>
-        <button id='camera' className='big-call-btn camera-btn' onClick={this.callInHangUp}></button>
+        {this.renderControls()}
       </div>
       <div className="notify-container">
         <p>Notify the group when I call in</p>
