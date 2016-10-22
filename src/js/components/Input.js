@@ -109,6 +109,8 @@ class ChatInput extends React.Component {
   }
 
   renderActions() {
+    const {creator} = this.props.creator;
+    if(!creator){ return }
     return (<div className="controls-action" style={this.calculateCallBtnStyle()}>
       <button className={`chat-input--actions--item call-btn ${this.props.calledIn ? 'hangup' : '' }` } onClick={this.props.callInHangUp}>
       </button>

@@ -152,7 +152,7 @@ class App extends React.Component {
   }
 
   renderChat() {
-    return <Input calledIn={this.state.calledIn} setChatInputState={this.blurInput} blurChat={this.state.blurInput} callInHangUp={this.callInHangUp}/>;
+    return <Input calledIn={this.state.calledIn} setChatInputState={this.blurInput} blurChat={this.state.blurInput} callInHangUp={this.callInHangUp} creator={this.state.creator}/>;
   }
 
   renderMessages() {
